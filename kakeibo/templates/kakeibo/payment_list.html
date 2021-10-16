@@ -1,0 +1,97 @@
+{% extends 'kakeibo/base.html' %}
+{% load humanize %}
+{% load kakeibo %}
+{% block content %}
+
+<form class="mt-2" id="search-form" action="" method="GET">
+  <div>
+    <label class="label mr-4">年月</label>
+    {{ search_form.year }}
+    {{ search_form.month }}
+  </div>
+  <div class="mt-4">
+    <label class="label mr-4">金額</label>
+    {{ search_form.greater_than }}
+    <span class="ml-4 mr-4">～</span>
+    {{ search_form.less_than }}
+  </div>
+  <div class="mt-4">
+    {{ search_form.key_word }}
+    <button class="btn btn-info ml-4" type="submit">検索</button>
+  </div>
+  <div class="mt-2 inline">
+    {{ search_form.category }}
+  </div>
+</form>
+
+<p class="search-result mt-3"> {{ page_obj.paginator.count }}件の検索結果 </p>
+
+<table class="table mt-3">
+  <tr>
+    <th>日付</th>
+    <th>カテゴリ</th>
+    <th>金額</th>
+    <th>摘要</th>
+    <!-- 追加 -->
+    <th>編集</th>
+  </tr>
+  {% for payment in payment_list %}
+
+  <tr>
+    <td>{{ payment.date }}</td>
+    <td>{{ payment.category }}</td>
+    <td>{{ payment.price|intcomma}}</td>
+    <td>
+      {% if payment.description %}
+      {{ payment.description }}
+      {% endif %}
+    </td>
+    <td>
+      <div class="manage-btn-area">
+        <div class="update-btn-area">
+          <a class="btn btn-info" href="{% url 'kakeibo:payment_update' payment.pk %}">更新</a>
+        </div>
+        <div class="delete-btn-area">
+          <a class="btn btn-danger" href="{% url 'kakeibo:payment_delete' payment.pk %}">削除</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div class="mt-5">
+  {% if page_obj.has_previous %}
+  <a class="mr-2 font-weight-bold" href="?{% url_replace request 'page' page_obj.previous_page_number %}" title="前ページへ">前へ</a>
+  {% endif %}
+
+  <span style="color:#0d1a3c">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+  {% if page_obj.has_next %}
+  <a class="ml-2 font-weight-bold" href="?{% url_replace request 'page' page_obj.next_page_number %}" title="次ページへ">次へ</a>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', e => {
+    const searchForm = document.getElementById('search-form');
+
+    for (const check of document.getElementsByName('category')) {
+      check.addEventListener('change', () => {
+        searchForm.submit();
+      });
+    }
+
+    const selectedCategory = document.querySelector(`input[name='category']:checked`)
+    if (selectedCategory) {
+      selectedCategory.onclick = () => {
+        selectedCategory.checked = false
+        searchForm.submit();
+      }
+    }
+  });
+</script>
+{% endblock %}

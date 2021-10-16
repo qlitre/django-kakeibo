@@ -1,0 +1,28 @@
+{% extends 'kakeibo/base.html' %}
+
+{% block content %}
+<h1>{{ page_title }}</h1>
+<p class="mt-5"> 本当に削除してよろしいですか？</p>
+
+<p class="mt-4">日付：{{ object.date }}</p>
+<p class="mt-4">カテゴリ：{{ object.category }}</p>
+<p class="mt-4">金額：{{ object.price }}</p>
+<p class="mt-4">摘要： {% if payment.description %}{{ object.description }}{% endif %}</p>
+
+<form class="mt-4" method="post">
+  {% csrf_token %}
+  {% if '支出' in page_title %}
+  <a class="btn btn-info" href="{% url 'kakeibo:payment_list'%}">
+    いいえ、一覧に戻ります
+  </a>
+  {% else %}
+  <a class="btn btn-info" href="{% url 'kakeibo:income_list'%}">
+    いいえ、一覧に戻ります
+  </a>
+  {% endif %}
+  <button type="submit" class="btn btn-danger">
+    はい、削除します
+  </button>
+</form>
+
+{% endblock %}

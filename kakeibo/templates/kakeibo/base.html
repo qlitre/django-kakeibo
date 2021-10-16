@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>家計簿アプリ</title>
+  <link rel="stylesheet" href="{% static 'kakeibo/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'kakeibo/css/style.css' %}">
+  {% block extrajs %}{% endblock %}
+</head>
+
+<body>
+  <header class="page-header">
+    <h1>
+      <a href="{% url 'kakeibo:payment_list' %}" class="header-title">家計簿アプリ</a>
+    </h1>
+    <nav class="nav">
+      <ul class="main-nav ml-5">
+        <li class="ml-5">
+          <a href="{% url 'kakeibo:payment_list'%}">支出一覧</a>
+        </li>
+        <li class="ml-5">
+          <a href="{% url 'kakeibo:income_list'%}">収入一覧</a>
+        </li>
+        <li class="ml-5">
+          <a href="{% url 'kakeibo:payment_create'%}">支出登録</a>
+        </li>
+        <li class="ml-5">
+          <a href="{% url 'kakeibo:income_create'%}">収入登録</a>
+        </li>
+        <li class="ml-5">
+          <a href="{% url 'kakeibo:month_dashboard' now_year now_month%}">月間支出</a>
+        </li>
+        <li class="ml-5">
+          <a href="{% url 'kakeibo:transition' %}">収支推移</a>
+        </li>
+    </nav>
+  </header>
+
+  <div class="layout">
+    <div class="container">
+      <main>
+        {% if messages %}
+        <div class="alert alert-success js-alert" id="js-alert">
+          <button class="alert-btn-close js-alert-close" type="button">ｘ</button>
+          {% for message in messages %}
+          <p> {{ message|linebreaks }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+</body>
+<script type="text/javascript">
+  for (const element of document.querySelectorAll('.js-alert > .js-alert-close')) {
+    element.addEventListener('click', e => {
+      e.target.parentElement.classList.add('is-hidden');
+    });
+  }
+</script>
+
+</html>

@@ -1,0 +1,60 @@
+{% extends 'kakeibo/base.html' %}
+{% load humanize %}
+{% load kakeibo %}
+{% block content %}
+
+<form class="mt-2" id="search-form" action="" method="GET">
+  <label class="label mr-4">年月</label>
+  {{ search_form.year }}
+  {{ search_form.month }}
+  <button class="btn btn-info ml-4" type="submit">検索</button>
+</form>
+
+<p class="search-result mt-3"> {{ page_obj.paginator.count }}件の検索結果 </p>
+
+<table class="table mt-3">
+  <tr>
+    <th>日付</th>
+    <th>カテゴリ</th>
+    <th>金額</th>
+    <th>摘要</th>
+    <th>編集</th>
+  </tr>
+  {% for income in income_list %}
+
+  <tr>
+    <td>{{ income.date }}</td>
+    <td>{{ income.category }}</td>
+    <td>{{ income.price|intcomma}}</td>
+    <td>
+      {% if income.description %}
+      {{ income.description }}
+      {% endif %}
+    </td>
+    <td>
+      <div class="manage-btn-area">
+        <div class="update-btn-area">
+          <a class="btn btn-info" href="{% url 'kakeibo:income_update' income.pk %}">更新</a>
+        </div>
+        <div class="delete-btn-area">
+          <a class="btn btn-danger" href="{% url 'kakeibo:income_delete' income.pk %}">削除</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div class="mt-5">
+  {% if page_obj.has_previous %}
+  <a class="mr-2 font-weight-bold" href="?{% url_replace request 'page' page_obj.previous_page_number %}" title="前ページへ">前へ</a>
+  {% endif %}
+
+  <span style="color:#0d1a3c">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+  {% if page_obj.has_next %}
+  <a class="ml-2 font-weight-bold" href="?{% url_replace request 'page' page_obj.next_page_number %}" title="次ページへ">次へ</a>
+  {% endif %}
+</div>
+
+{% endblock %}

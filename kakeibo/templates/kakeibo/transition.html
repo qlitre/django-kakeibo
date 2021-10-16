@@ -1,0 +1,93 @@
+{% extends 'kakeibo/base.html' %}
+
+{% block content %}
+<form id="search-form" action="" method="GET">
+  <h2 class="section-title">表示グラフ</h2>
+  <div class="mt-2">
+    {{ search_form.graph_visible }}
+  </div>
+
+  {% if search_form.cleaned_data.graph_visible != 'Income' %}
+  <h2 class=" mt-4 section-title">支出カテゴリ</h2>
+  <div class="inline mt-2">
+    {{ search_form.payment_category }}
+  </div>
+  {% endif %}
+
+  {% if search_form.cleaned_data.graph_visible != 'Payment' %}
+  <h2 class=" mt-4 section-title">収入カテゴリ</h2>
+  <div class="inline mt-2" style="padding-bottom:10px;">
+    {{ search_form.income_category }}
+  </div>
+  {% endif %}
+</form>
+
+{% autoescape off %}
+{{ transition_plot }}
+{% endautoescape %}
+
+
+{% endblock %}
+{% block extrajs %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', e => {
+    const searchForm = document.getElementById('search-form');
+
+    for (const check of document.getElementsByName('payment_category')) {
+      check.addEventListener('change', () => {
+        searchForm.submit();
+      });
+    }
+    for (const check of document.getElementsByName('income_category')) {
+      check.addEventListener('change', () => {
+        searchForm.submit();
+      });
+    }
+
+    for (const check of document.getElementsByName('graph_visible')) {
+      check.addEventListener('change', () => {
+        if (check.value == 'Payment') {
+          for (const radio of document.getElementsByName('income_category')) {
+            if (radio.checked) {
+              radio.checked = false;
+            }
+          }
+        } else {
+          for (const radio of document.getElementsByName('payment_category')) {
+            if (radio.checked) {
+              radio.checked = false
+            }
+          }
+        }
+        searchForm.submit();
+      })
+    }
+
+    const selectedPaymentCategory = document.querySelector(`input[name='payment_category']:checked`)
+    if (selectedPaymentCategory) {
+      selectedPaymentCategory.onclick = () => {
+        selectedPaymentCategory.checked = false
+        searchForm.submit();
+      }
+    }
+
+    const selectedIncomeCategory = document.querySelector(`input[name='income_category']:checked`)
+    if (selectedIncomeCategory) {
+      selectedIncomeCategory.onclick = () => {
+        selectedIncomeCategory.checked = false
+        searchForm.submit();
+      }
+    }
+
+    const selectedGraphVisible = document.querySelector(`input[name='graph_visible']:checked`)
+    if (selectedGraphVisible) {
+      selectedGraphVisible.onclick = () => {
+        selectedGraphVisible.checked = false
+        searchForm.submit();
+      }
+    }
+  });
+</script>
+
+{% endblock %}
