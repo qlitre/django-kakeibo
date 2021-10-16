@@ -283,7 +283,6 @@ a.header-title {
   color: #fff;
 }
 
-/*追加*/
 .btn-danger, a.btn-danger {
   background-color: #f93154;
   color: #fff;
@@ -345,7 +344,7 @@ a.header-title {
 }
 
 /* --------------------------------
- * ページネーション・検索検数
+ * ページネーション・検索件数
  * -------------------------------- */
 .search-result {
   color: #39c0ed;
@@ -358,6 +357,7 @@ a.header-title {
 /* --------------------------------
  * 一覧ページのボタン部分
  * -------------------------------- */
+
 /*通常は横並び*/
 .manage-btn-area {
   display: flex;
