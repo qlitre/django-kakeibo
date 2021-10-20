@@ -7,7 +7,7 @@
 <p class="mt-4">日付：{{ object.date }}</p>
 <p class="mt-4">カテゴリ：{{ object.category }}</p>
 <p class="mt-4">金額：{{ object.price }}</p>
-<p class="mt-4">摘要： {% if payment.description %}{{ object.description }}{% endif %}</p>
+<p class="mt-4">摘要： {% if object.description %}{{ object.description }}{% endif %}</p>
 
 <form class="mt-4" method="post">
   {% csrf_token %}
