@@ -1,4 +1,16 @@
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv(verbose=True)
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path) 
+
+DSN = os.environ.get("DB_NAME")
+USN = os.environ.get("USER_NAME")
+PWD = os.environ.get("PASSWORD")
+HOST = os.environ.get("HOST_NAME")
+PORT = os.environ.get("PORT")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -65,8 +77,14 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': DSN,
+        'USER': USN,
+        'PASSWORD': PWD,
+        'HOST': HOST,
+        'PORT': PORT,
     }
 }
 
