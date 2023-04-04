@@ -1,5 +1,6 @@
 from pathlib import Path
 from dotenv import load_dotenv
+from os.path import join, dirname
 
 load_dotenv(verbose=True)
 
